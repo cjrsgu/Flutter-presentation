@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "fetch": true
+  },
+  "rules": {
+    "linebreak-style": 0,
+    "react/no-unused-state": 0,
+    "no-shadow": 0
+  }
+}
