@@ -16,7 +16,7 @@ class ProfileRoute extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text('${upperFirst(this.friend.firstName)}\'s profile'),
       ),
       body: Container(
         alignment: Alignment(0.0, 0.0),
