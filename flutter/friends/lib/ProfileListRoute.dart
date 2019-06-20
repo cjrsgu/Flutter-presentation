@@ -5,25 +5,22 @@ import 'dart:core';
 import 'ProfileRoute.dart';
 
 class ProfileListRoute extends StatelessWidget {
-
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Friends'),
-        ),
-        body: new FriendCards(),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Friends'),
+      ),
+      body: new FriendCards(),
+    );
   }
-
+}
 
 class FriendCards extends StatelessWidget {
   Future<List<Friend>> fetchFriends() async {
     final Response response = await get('https://randomuser.me/api/?results=25');
     print(json.decode(response.body)['results']);
     List responseJson = json.decode(response.body)['results'];
-    // var responseJson = json.decode(response.body);
     return responseJson.map((m) => new Friend.fromJson(m)).toList();
   }
 
@@ -37,14 +34,48 @@ class FriendCards extends StatelessWidget {
       return new ListView(
         children: friends.map((friend) =>
         GestureDetector(
-          child: Row(
-            children: <Widget>[
-              Image.network(friend.thumbnail),
-              Text('${friend.firstName} ${friend.lastName}'),
-            ],
+          child: Container(
+            decoration:BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(width: 4.0, color: Colors.orange[100]),
+              ),
+            ),
+            padding: EdgeInsets.only(
+              left: 5.0,
+              right: 5.0,
+            ),
+            width: 48.0,
+            height: 48.0,
+            constraints: BoxConstraints.expand(
+              width: double.infinity,
+              height: 100.0,
+            ),
+            child: Row(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: new BorderRadius.circular(50),
+                  child: Image.network(
+                    friend.mediumImage,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 25.0),
+                  child: Text(
+                    '${upperFirst(friend.firstName)} ${upperFirst(friend.lastName)}',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           onTap: () {
-            print('tapped');
             Navigator.push(
               context,
               MaterialPageRoute(builder: (BuildContext context) => new ProfileRoute(friend: friend))
@@ -66,6 +97,8 @@ class Friend {
   final int age;
   final String cell;
   final String thumbnail;
+  final String largeImage;
+  final String mediumImage;
 
   Friend({
     this.firstName,
@@ -75,6 +108,8 @@ class Friend {
     this.age,
     this.cell,
     this.thumbnail,
+    this.mediumImage,
+    this.largeImage,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
@@ -83,6 +118,8 @@ class Friend {
         lastName: json['name']['last'].toString(),
         userName: json['login']['username'].toString(),
         thumbnail: json['picture']['thumbnail'].toString(),
+        mediumImage: json['picture']['medium'].toString(),
+        largeImage: json['picture']['large'].toString(),
         email: json['email'].toString(),
         age: json['dob']['age'],
         cell: json['cell'],
