@@ -18,9 +18,9 @@ const AppNavigator = createStackNavigator({
   initialRouteName: 'ProfileList',
   defaultNavigationOptions: {
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#ff9800',
     },
-    headerTintColor: '#fff',
+    headerTintColor: '#000',
     headerTitleStyle: {
       fontWeight: 'bold',
     },

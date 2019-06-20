@@ -5,9 +5,17 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 class ProfileListScreen extends PureComponent {
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+  }
+
   static navigationOptions = {
     title: 'Friends',
   };
@@ -37,7 +45,7 @@ class ProfileListScreen extends PureComponent {
 
     return (
       <View>
-        <Text>ProfileListScreen</Text>
+        <StatusBar backgroundColor="#bf7200" barStyle="dark-content" />
         <FlatList
           data={friendsList}
           keyExtractor={item => item.email}
@@ -47,20 +55,33 @@ class ProfileListScreen extends PureComponent {
             >
               <View
                 style={{
-                  height: 100,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderBottomColor: '#ffe0b2',
+                  borderBottomWidth: 4,
+                  paddingHorizontal: 5,
                 }}
               >
                 <Image
                   style={{
-                    width: 50,
-                    height: 50,
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
                   }}
                   source={{
-                    uri: friend.picture.thumbnail,
+                    uri: friend.picture.medium,
                   }}
                 />
-                <Text>{friend.name.first}</Text>
-                <Text>{friend.name.last}</Text>
+                <Text
+                  style={{
+                    textTransform: 'capitalize',
+                    fontSize: 20,
+                    color: '#ff9800',
+                    paddingLeft: 25,
+                  }}
+                >
+                  {`${friend.name.first} ${friend.name.last}`}
+                </Text>
               </View>
             </TouchableOpacity>
           )}
