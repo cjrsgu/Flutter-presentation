@@ -19,7 +19,6 @@ class ProfileListRoute extends StatelessWidget {
 class FriendCards extends StatelessWidget {
   Future<List<Friend>> fetchFriends() async {
     final Response response = await get('https://randomuser.me/api/?results=25');
-    print(json.decode(response.body)['results']);
     List responseJson = json.decode(response.body)['results'];
     return responseJson.map((m) => new Friend.fromJson(m)).toList();
   }
@@ -28,62 +27,67 @@ class FriendCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return new FutureBuilder<List<Friend>>(
     future: fetchFriends(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) return Container();
-      List<Friend> friends = snapshot.data;
-      return new ListView(
-        children: friends.map((friend) =>
-        GestureDetector(
-          child: Container(
-            decoration:BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 4.0, color: Colors.orange[100]),
-              ),
-            ),
-            padding: EdgeInsets.only(
-              left: 5.0,
-              right: 5.0,
-            ),
-            width: 48.0,
-            height: 48.0,
-            constraints: BoxConstraints.expand(
-              width: double.infinity,
-              height: 100.0,
-            ),
-            child: Row(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: new BorderRadius.circular(50),
-                  child: Image.network(
-                    friend.mediumImage,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.fitWidth,
-                  ),
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      if (snapshot.hasData) {
+        List<Friend> friends = snapshot.data;
+        return new ListView(
+          children: friends.map((friend) =>
+          GestureDetector(
+            child: Container(
+              decoration:BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(width: 4.0, color: Colors.orange[100]),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 25.0),
-                  child: Text(
-                    '${upperFirst(friend.firstName)} ${upperFirst(friend.lastName)}',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.orange,
+              ),
+              padding: EdgeInsets.only(
+                left: 5.0,
+                right: 5.0,
+              ),
+              width: 48.0,
+              height: 48.0,
+              constraints: BoxConstraints.expand(
+                width: double.infinity,
+                height: 100.0,
+              ),
+              child: Row(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: new BorderRadius.circular(50),
+                    child: Image.network(
+                      friend.mediumImage,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      '${upperFirst(friend.firstName)} ${upperFirst(friend.lastName)}',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => new ProfileRoute(friend: friend))
-            );
-          },
-        )
-        ).toList(),
-      );
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (BuildContext context) => new ProfileRoute(friend: friend))
+              );
+            },
+          )
+          ).toList(),
+        );
+      } else {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
     },
   );
   }
