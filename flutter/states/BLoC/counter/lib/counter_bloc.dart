@@ -19,7 +19,6 @@ class CounterBloc {
 
   void _mapEventToState(CounterEvent event) {
     if (event is IncrementEvent) {
-      print('hello');
       _counter++;
     } else {
       _counter--;
