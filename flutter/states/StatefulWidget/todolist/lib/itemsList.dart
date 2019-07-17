@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/item.dart';
 
 class ToDoListScreen extends StatelessWidget {
   @override
